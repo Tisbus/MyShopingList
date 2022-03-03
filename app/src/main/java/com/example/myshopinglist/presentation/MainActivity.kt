@@ -15,9 +15,7 @@ class MainActivity : AppCompatActivity() {
         val viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
         viewModel.shopList.observe(this, Observer {
-
             Log.d("check", it.toString())
         })
-        viewModel.getShopList()
     }
 }
