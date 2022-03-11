@@ -1,6 +1,5 @@
 package com.example.myshopinglist.presentation
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myshopinglist.data.ShopListRepositoryImpl
 import com.example.myshopinglist.domain.DeleteShopItemUseCase
@@ -26,6 +25,4 @@ class MainViewModel : ViewModel() {
         val newItem = item.copy(enabled = !item.enabled)
         editShopItemUseCase.editShopItem(newItem)
     }
-
-
 }

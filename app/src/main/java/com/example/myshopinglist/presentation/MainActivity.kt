@@ -17,5 +17,9 @@ class MainActivity : AppCompatActivity() {
         viewModel.shopList.observe(this, Observer {
             Log.d("check", it.toString())
         })
+
+        fun setupRecycler(){
+
+        }
     }
 }
