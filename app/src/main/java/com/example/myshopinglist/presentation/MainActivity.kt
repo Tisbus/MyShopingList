@@ -1,5 +1,6 @@
 package com.example.myshopinglist.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myshopinglist.R
+import com.example.myshopinglist.presentation.adapter.ShopListAdapter
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class MainActivity : AppCompatActivity() {
@@ -24,8 +27,15 @@ class MainActivity : AppCompatActivity() {
             adapterShop.submitList(it)
             Log.d("check", it.toString())
         })
+        addItem()
+    }
 
-
+    private fun addItem() {
+        val floatAddItem = findViewById<FloatingActionButton>(R.id.floatAddItem)
+        floatAddItem.setOnClickListener {
+            val addItem = Intent(this, ShopItemActivity::class.java)
+            startActivity(addItem)
+        }
     }
 
     private fun setupRecycler() {
@@ -85,6 +95,10 @@ class MainActivity : AppCompatActivity() {
     private fun setupShortClickListener() {
         adapterShop.onClickListener = {
             viewModel.editShopItem(it)
+            val editItem = Intent(this, ShopItemActivity::class.java)
+            editItem.putExtra("item", it.id)
+            editItem.putExtra("word", 666)
+            startActivity(editItem)
             Log.i("tap", "tap $it")
         }
     }

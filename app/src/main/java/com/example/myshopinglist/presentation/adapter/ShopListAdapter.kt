@@ -1,10 +1,11 @@
-package com.example.myshopinglist.presentation
+package com.example.myshopinglist.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.example.myshopinglist.R
 import com.example.myshopinglist.domain.ShopItem
+import com.example.myshopinglist.presentation.ShopItemDiffUtil
 import java.io.IOException
 
 class ShopListAdapter : ListAdapter<ShopItem, ShopListHolder>(ShopItemDiffUtil()) {

@@ -3,4 +3,7 @@
     <string name="add_item_desc">add item</string>
     <string name="name_item">Название</string>
     <string name="item_count">кол-во</string>
+    <string name="save">Save</string>
+    <string name="name">Name</string>
+    <string name="count">Count</string>
 </resources>
