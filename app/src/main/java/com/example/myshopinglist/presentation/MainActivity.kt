@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     private fun addItem() {
         val floatAddItem = findViewById<FloatingActionButton>(R.id.floatAddItem)
         floatAddItem.setOnClickListener {
-            val addItem = Intent(this, ShopItemActivity::class.java)
+            val addItem = ShopItemActivity.newIntentAdd(this)
             startActivity(addItem)
         }
     }
@@ -94,10 +94,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupShortClickListener() {
         adapterShop.onClickListener = {
-            viewModel.editShopItem(it)
-            val editItem = Intent(this, ShopItemActivity::class.java)
-            editItem.putExtra("item", it.id)
-            editItem.putExtra("word", 666)
+            val editItem = ShopItemActivity.newIntentEdit(this, it.id)
             startActivity(editItem)
             Log.i("tap", "tap $it")
         }
