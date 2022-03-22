@@ -8,38 +8,56 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.myshopinglist.R
+import com.google.android.material.textfield.TextInputLayout
 
 class ShopItemActivity : AppCompatActivity() {
 
     private lateinit var viewShopModel: ShopViewModel
     private lateinit var mode: String
+    private lateinit var nameET: EditText
+    private lateinit var countET: EditText
+    private lateinit var saveButton: Button
+    private lateinit var tilCount: TextInputLayout
+    private lateinit var tilName: TextInputLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shop_item)
         viewShopModel = ViewModelProvider(this)[ShopViewModel::class.java]
+        initView()
         if (intent.hasExtra(EXTRA_SCREEN_MODE)) {
             mode = intent.getStringExtra(EXTRA_SCREEN_MODE).toString()
         }
-        val nameET = findViewById<EditText>(R.id.etName)
-        val countET = findViewById<EditText>(R.id.etCount)
-
-        val saveButton = findViewById<Button>(R.id.saveButton)
         if (mode == MODE_EDIT) {
             val itemId = intent.getIntExtra(EXTRA_SHOP_ITEM_ID, 0)
             viewShopModel.getShopItem(itemId)
-            nameET.setText(viewShopModel.getShopItemLD.value?.name ?: "")
-            countET.setText(viewShopModel.getShopItemLD.value?.count.toString())
-        }
-        saveButton.setOnClickListener {
-            if (mode == MODE_EDIT) {
-                viewShopModel.editShopItem(nameET.text.toString(), countET.text.toString())
-                goMain()
-            } else {
-                viewShopModel.addShopItem(nameET.text.toString(), countET.text.toString())
-                goMain()
+            viewShopModel.getShopItemLD.observe(this) {
+                nameET.setText(it.name)
+                countET.setText(it.count.toString())
             }
         }
+        saveButton.setOnClickListener {
+            when (mode) {
+                MODE_EDIT -> viewShopModel.editShopItem(
+                    nameET.text.toString(),
+                    countET.text.toString()
+                )
+                MODE_ADD -> viewShopModel.addShopItem(
+                    nameET.text.toString(),
+                    countET.text.toString()
+                )
+            }
+            goMain()
+        }
 
+    }
+
+    private fun initView() {
+        nameET = findViewById(R.id.etName)
+        countET = findViewById(R.id.etCount)
+        saveButton = findViewById(R.id.saveButton)
+        tilCount = findViewById(R.id.tilCount)
+        tilName = findViewById(R.id.tilName)
     }
 
     private fun goMain() {
