@@ -6,4 +6,6 @@
     <string name="save">Save</string>
     <string name="name">Name</string>
     <string name="count">Count</string>
+    <string name="error">Ошибка, неверный формат!</string>
+    <string name="empty_string">Пустая строка</string>
 </resources>
