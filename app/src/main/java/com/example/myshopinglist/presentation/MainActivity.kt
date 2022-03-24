@@ -1,9 +1,9 @@
 package com.example.myshopinglist.presentation
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -17,24 +17,41 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var adapterShop: ShopListAdapter
     private lateinit var viewModel: MainViewModel
+    private var shopItemContainer: FragmentContainerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        shopItemContainer = findViewById(R.id.shop_item_container)
         setupRecycler()
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.shopList.observe(this, Observer {
             adapterShop.submitList(it)
-            Log.d("check", it.toString())
         })
         addItem()
+    }
+
+    private fun isOnePaneMode(): Boolean {
+        return shopItemContainer == null
+    }
+
+    private fun launchFragment(fragment: Fragment) {
+        supportFragmentManager.popBackStack()
+        supportFragmentManager.beginTransaction()
+            .add(R.id.shop_item_container, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun addItem() {
         val floatAddItem = findViewById<FloatingActionButton>(R.id.floatAddItem)
         floatAddItem.setOnClickListener {
-            val addItem = ShopItemActivity.newIntentAdd(this)
-            startActivity(addItem)
+            if (isOnePaneMode()) {
+                val addItem = ShopItemActivity.newIntentAdd(this)
+                startActivity(addItem)
+            } else {
+                launchFragment(ShopItemFragment.newFragmentAddItem())
+            }
         }
     }
 
@@ -94,17 +111,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupShortClickListener() {
         adapterShop.onClickListener = {
-            val editItem = ShopItemActivity.newIntentEdit(this, it.id)
-            startActivity(editItem)
-            Log.i("tap", "tap $it")
+            if (isOnePaneMode()) {
+                val editItem = ShopItemActivity.newIntentEdit(this, it.id)
+                startActivity(editItem)
+            } else {
+                launchFragment(ShopItemFragment.newFragmentEditItem(it.id))
+            }
         }
     }
 
     private fun setupLongClickListener() {
         adapterShop.onShopItemLongClick = {
-
             viewModel.changeEnableState(it)
-            Log.i("tap", "tap $it")
         }
     }
 
