@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.myshopinglist.R
 import com.example.myshopinglist.domain.ShopItem
 
-class ShopItemActivity : AppCompatActivity() {
+class ShopItemActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedListener {
 
     private var screenMode: String = UNKNOWN_MODE
     private var shopId: Int = ShopItem.UNDEFINED_ID
@@ -16,7 +16,9 @@ class ShopItemActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shop_item)
         parseIntent()
-        launchScreenMode()
+        if (savedInstanceState == null) {
+            launchScreenMode()
+        }
     }
 
     private fun launchScreenMode() {
@@ -26,7 +28,9 @@ class ShopItemActivity : AppCompatActivity() {
             else -> throw RuntimeException("Param mode is not absent")
         }
 
-        supportFragmentManager.beginTransaction().add(R.id.shop_item_container, fragment).commit()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.shop_item_container, fragment)
+            .commit()
     }
 
 
@@ -67,5 +71,9 @@ class ShopItemActivity : AppCompatActivity() {
             intent.putExtra(EXTRA_SHOP_ITEM_ID, itemId)
             return intent
         }
+    }
+
+    override fun onEditingFinished() {
+        finish()
     }
 }
