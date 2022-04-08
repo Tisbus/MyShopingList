@@ -2,11 +2,16 @@ package com.example.myshopinglist.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.ListAdapter
 import com.example.myshopinglist.R
+import com.example.myshopinglist.databinding.ShopItemDisableBinding
+import com.example.myshopinglist.databinding.ShopItemEnableBinding
 import com.example.myshopinglist.domain.ShopItem
 import com.example.myshopinglist.presentation.ShopItemDiffUtil
 import java.io.IOException
+import java.util.zip.Inflater
 
 class ShopListAdapter : ListAdapter<ShopItem, ShopListHolder>(ShopItemDiffUtil()) {
 
@@ -26,20 +31,28 @@ class ShopListAdapter : ListAdapter<ShopItem, ShopListHolder>(ShopItemDiffUtil()
             VIEW_DISABLED -> R.layout.shop_item_disable
             else -> throw IOException("Error: $viewType")
         }
-        val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
-        return ShopListHolder(view)
+        val bind = DataBindingUtil.inflate<ViewDataBinding>(LayoutInflater.from(parent.context), layout, parent, false)
+        return ShopListHolder(bind)
     }
 
     override fun onBindViewHolder(holder: ShopListHolder, position: Int) {
         val shopItems : ShopItem = getItem(position)
-        holder.tvName.text = shopItems.name
-        holder.tvCount.text = shopItems.count.toString()
-        holder.itemView.setOnLongClickListener {
+        val binding = holder.bind
+        when(binding){
+            is ShopItemDisableBinding -> {
+                binding.shopItem = shopItems
+            }
+            is ShopItemEnableBinding ->{
+                binding.shopItem = shopItems
+            }
+        }
+
+        binding.root.setOnLongClickListener {
             onShopItemLongClick?.invoke(shopItems)
             true
 
         }
-        holder.itemView.setOnClickListener {
+        binding.root.setOnClickListener {
             onClickListener?.invoke(shopItems)
         }
     }

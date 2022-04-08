@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.myshopinglist.presentation.ShopViewModel" />
+    </data>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -15,6 +21,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:errorInputName="@{viewModel.errorInputName}"
         app:layout_constraintVertical_chainStyle="packed">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -22,6 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
+            android:text="@{viewModel.getShopItemLD.name}"
             android:hint="@string/name" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -32,12 +40,14 @@
         app:layout_constraintBottom_toTopOf="@+id/saveButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:errorInputCount="@{viewModel.errorInputCount}"
         app:layout_constraintTop_toBottomOf="@+id/tilName">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etCount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@{String.valueOf(viewModel.getShopItemLD.count)}"
             android:inputType="numberDecimal"
             android:hint="@string/count" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -52,3 +62,4 @@
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
