@@ -51,6 +51,7 @@ class ShopItemFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewShopModel = ViewModelProvider(this)[ShopViewModel::class.java]
         bind.viewModel = viewShopModel
         bind.lifecycleOwner = viewLifecycleOwner
