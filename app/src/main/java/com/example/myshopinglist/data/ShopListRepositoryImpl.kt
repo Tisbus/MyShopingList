@@ -5,13 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.example.myshopinglist.domain.ShopItem
 import com.example.myshopinglist.domain.ShopListRepository
-import kotlinx.coroutines.CoroutineScope
+import javax.inject.Inject
 
-class ShopListRepositoryImpl(application: Application) : ShopListRepository {
+class ShopListRepositoryImpl @Inject constructor(
+    private val application: Application,
+    private val mapper : ShopListMapper,
+    private val db : ShopItemDao
+) : ShopListRepository {
 
-    private val mapper = ShopListMapper()
-
-    private val db = AppDatabase.getInstance(application).shopItemDao()
 /*    override fun getShopList(): LiveData<List<ShopItem>> = MediatorLiveData<List<ShopItem>>().apply {
         addSource(db.getShopItemList()){
             value = mapper.mapListDbModelToListEntity(it)

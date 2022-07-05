@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [ShopItemDBModel::class], version = 1, exportSchema = false)
+@Database(entities = [ShopItemDBModel::class], version = 2, exportSchema = false)
 
 
 
@@ -15,7 +15,7 @@ abstract class AppDatabase : RoomDatabase() {
 
     companion object {
         private var INSTANCE: AppDatabase? = null
-        private val DB_NAME = "shop_item"
+        private val DB_NAME = "shop_item.db"
         private val LOCK = Any()
 
         fun getInstance(application: Application): AppDatabase {

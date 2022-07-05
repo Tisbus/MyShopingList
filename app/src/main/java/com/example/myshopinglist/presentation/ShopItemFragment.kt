@@ -1,20 +1,20 @@
 package com.example.myshopinglist.presentation
 
+import android.content.ContentValues
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.myshopinglist.R
 import com.example.myshopinglist.databinding.ShopItemFragmentBinding
 import com.example.myshopinglist.domain.ShopItem
-import com.google.android.material.textfield.TextInputLayout
+import javax.inject.Inject
+import kotlin.concurrent.thread
 
 class ShopItemFragment : Fragment() {
 
@@ -22,6 +22,13 @@ class ShopItemFragment : Fragment() {
     private var screenMode: String = UNKNOWN_MODE
     private var shopId: Int = ShopItem.UNDEFINED_ID
     private lateinit var onEditingFinishedListener : OnEditingFinishedListener
+
+    @Inject
+    lateinit var shopViewModelFactory: ShopViewModelFactory
+
+    val component by lazy{
+        (requireActivity().application as ShopApp).component
+    }
 
     private var _bind : ShopItemFragmentBinding? = null
     private val bind : ShopItemFragmentBinding
@@ -33,6 +40,7 @@ class ShopItemFragment : Fragment() {
     }
 
     override fun onAttach(context: Context) {
+        component.inject(this)
         super.onAttach(context)
         if(context is OnEditingFinishedListener){
             onEditingFinishedListener = context
@@ -52,7 +60,7 @@ class ShopItemFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewShopModel = ViewModelProvider(this)[ShopViewModel::class.java]
+        viewShopModel = ViewModelProvider(this, shopViewModelFactory)[ShopViewModel::class.java]
         bind.viewModel = viewShopModel
         bind.lifecycleOwner = viewLifecycleOwner
         addListenerChangeText()
@@ -113,6 +121,17 @@ class ShopItemFragment : Fragment() {
                 bind.etName.text.toString(),
                 bind.etCount.text.toString()
             )
+/*            thread {
+                context?.contentResolver?.insert(
+                    Uri.parse("content://com.example.myshopinglist/shop_items"),
+                    ContentValues().apply {
+                        put("id", 0)
+                        put("name",bind.etName.text.toString() )
+                        put("count",bind.etCount.text.toString() )
+                        put("enabled", true)
+                    }
+                )
+            }*/
         }
     }
 

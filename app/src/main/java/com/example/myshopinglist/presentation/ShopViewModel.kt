@@ -1,24 +1,20 @@
 package com.example.myshopinglist.presentation
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.example.myshopinglist.data.ShopListRepositoryImpl
+import androidx.lifecycle.*
 import com.example.myshopinglist.domain.AddShopItemUseCase
 import com.example.myshopinglist.domain.EditShopItemUseCase
 import com.example.myshopinglist.domain.GetShopItemUseCase
 import com.example.myshopinglist.domain.ShopItem
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ShopViewModel(application: Application) : AndroidViewModel(application) {
+class ShopViewModel @Inject constructor(
+    private val getShopItemUseCase: GetShopItemUseCase,
+    private val editShopItemUseCase: EditShopItemUseCase,
+    private val addShopItemUseCase: AddShopItemUseCase,
+) : ViewModel() {
 
-    private val repository = ShopListRepositoryImpl(application)
 
-    private val getShopItemUseCase = GetShopItemUseCase(repository)
-    private val editShopItemUseCase = EditShopItemUseCase(repository)
-    private val addShopItemUseCase = AddShopItemUseCase(repository)
     private val _errorInputName = MutableLiveData<Boolean>()
     val errorInputName: LiveData<Boolean>
         get() = _errorInputName
@@ -79,7 +75,7 @@ class ShopViewModel(application: Application) : AndroidViewModel(application) {
         return try {
             inputCount?.trim()?.toInt() ?: 0
         } catch (
-            e: Exception
+            e: Exception,
         ) {
             0
         }
